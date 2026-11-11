@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Atualiza o bloco do Chess.com em hobbies/index.html.
 
-Busca ratings e últimas partidas na Published-Data API do Chess.com
+Busca os ratings na Published-Data API do Chess.com
 (pública, sem chave) e reescreve o trecho entre os marcadores
 <!-- chesscom:inicio --> e <!-- chesscom:fim -->. O site continua sendo só
 HTML: este script roda antes da publicação (no GitHub Actions ou à mão).
@@ -14,12 +14,10 @@ import sys
 import urllib.error
 import urllib.request
 from datetime import datetime
-from html import escape
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 USUARIO = "iterando_xadrez"
-N_PARTIDAS = 10
 
 API = f"https://api.chess.com/pub/player/{USUARIO}"
 USER_AGENT = "site-pessoal-xadrez/1.0"
@@ -48,47 +46,7 @@ def buscar(url):
         sys.exit(f"Erro ao buscar {url}: {erro}. A página não foi alterada.")
 
 
-def ultimas_partidas():
-    """As N_PARTIDAS mais recentes, da mais nova para a mais antiga."""
-    partidas = []
-    for url_mes in reversed(buscar(f"{API}/games/archives")["archives"]):
-        partidas.extend(reversed(buscar(url_mes)["games"]))
-        if len(partidas) >= N_PARTIDAS:
-            break
-    return partidas[:N_PARTIDAS]
-
-
-def cor_do_usuario(partida):
-    """'white' ou 'black'. A API devolve o nome com maiúsculas (Iterando_Xadrez)."""
-    if partida["white"]["username"].lower() == USUARIO.lower():
-        return "white"
-    return "black"
-
-
-def resultado(partida):
-    """Devolve "Vitória", "Derrota" ou "Empate" do ponto de vista de USUARIO.
-
-    A API não marca o vencedor da partida, só um código por lado. Quem venceu
-    recebe "win"; o perdedor recebe o motivo ("checkmated", "resigned",
-    "timeout"...). Se ninguém tem "win", foi empate. Olhar o "win" do
-    adversário cobre qualquer motivo de derrota novo sem precisar listá-lo.
-    """
-    cor = cor_do_usuario(partida)
-    rival = "black" if cor == "white" else "white"
-    if partida[cor]["result"] == "win":
-        return "Vitória"
-    if partida[rival]["result"] == "win":
-        return "Derrota"
-    return "Empate"
-
-
-def data_html(timestamp):
-    """<time datetime="AAAA-MM-DD">DD/MM/AAAA</time>, no fuso de Goiânia."""
-    dia = datetime.fromtimestamp(timestamp, FUSO)
-    return f'<time datetime="{dia:%Y-%m-%d}">{dia:%d/%m/%Y}</time>'
-
-
-def gerar_html(stats, partidas):
+def gerar_html(stats):
     """Linhas do bloco (sem recuo), na ordem em que entram na página."""
     linhas = ["<h3>No Chess.com</h3>"]
 
@@ -122,29 +80,6 @@ def gerar_html(stats, partidas):
         )
     linhas += ["    </tbody>", "</table>"]
 
-    linhas += [
-        "",
-        '<table border="1">',
-        "    <caption>Últimas partidas no Chess.com</caption>",
-        "    <thead>",
-        "        <tr><th>Data</th><th>Modalidade</th><th>Cor</th><th>Adversário</th>"
-        "<th>Resultado</th><th>Link</th></tr>",
-        "    </thead>",
-        "    <tbody>",
-    ]
-    for p in partidas:
-        cor = cor_do_usuario(p)
-        rival = p["black" if cor == "white" else "white"]
-        linhas.append(
-            f"        <tr><td>{data_html(p['end_time'])}</td>"
-            f"<td>{MODALIDADES.get(p['time_class'], escape(p['time_class']))}</td>"
-            f"<td>{'Brancas' if cor == 'white' else 'Pretas'}</td>"
-            f"<td>{escape(rival['username'])} ({rival['rating']})</td>"
-            f"<td>{resultado(p)}</td>"
-            f'<td><a href="{escape(p["url"])}" target="_blank" rel="noopener">Ver partida</a></td></tr>'
-        )
-    linhas += ["    </tbody>", "</table>"]
-
     agora = datetime.now(FUSO)
     linhas.append(
         f'<p><small>{MARCA_DATA} <time datetime="{agora.isoformat(timespec="minutes")}">'
@@ -165,9 +100,8 @@ def main():
         sys.exit(f"Marcadores {INICIO} / {FIM} não encontrados em {PAGINA}.")
 
     stats = buscar(f"{API}/stats")
-    partidas = ultimas_partidas()
 
-    bloco = "\n".join(RECUO + l if l else "" for l in gerar_html(stats, partidas))
+    bloco = "\n".join(RECUO + l if l else "" for l in gerar_html(stats))
     bloco_atual = pagina[ini + len(INICIO):fim]
     if sem_data(bloco) == sem_data(bloco_atual):
         print("Dados do Chess.com sem mudanças. Nada a gravar.")
@@ -175,7 +109,7 @@ def main():
 
     nova = pagina[: ini + len(INICIO)] + "\n" + bloco + "\n" + RECUO + pagina[fim:]
     PAGINA.write_text(nova, encoding="utf-8")
-    print(f"{PAGINA.name} atualizado com {len(partidas)} partidas.")
+    print(f"{PAGINA.name} atualizado.")
 
 
 if __name__ == "__main__":

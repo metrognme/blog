@@ -2,25 +2,55 @@ COMO ADICIONAR E REMOVER CONTEÚDO
 =================================
 
 Estrutura:
-  index.html                 página inicial (Sobre Mim + Contato)
+  index.html                 página inicial (Sobre Mim, Como Posso Ajudar, Contato)
   atualmente.html            página "Atualmente"
-  profissional/index.html    lista de artigos       -> arquivos em profissional/artigos/
-  hobbies/index.html         um bloco por hobby     -> textos em hobbies/estudos/
-                             (xadrez: dados do Chess.com + estudos + partidas)
+  profissional/index.html    serviços + lista de artigos -> arquivos em profissional/artigos/
+  hobbies/index.html         um bloco por hobby          -> textos em hobbies/estudos/
+                             (xadrez: ratings do Chess.com + estudos + partidas)
+
+Contato profissional: WhatsApp (62) 99943-4595. O link é
+  https://wa.me/5562999434595?text=...
+e aparece na home e no fim dos serviços. Se o número mudar, troque nos
+dois lugares:  grep -rn "wa.me" --include=*.html .
+
+Todas as páginas têm no rodapé "OAB/GO n. 55.987" (o Código de Ética
+exige nome e número da OAB na publicidade). Não tire.
+
+
+SEÇÕES ESCONDIDAS
+-----------------
+"Artigos e Análises" (profissional) e "Estudos de Aberturas" e
+"Registro de Partidas" (hobbies) estão escondidas dentro de um
+comentário até existir o primeiro conteúdo. Cada uma começa com uma
+linha "<!-- NOME (escondido ...)" e termina com uma linha "fim -->".
+
+Para mostrar: apague essas duas linhas (a primeira e a "fim -->") e a
+linha logo abaixo da primeira, que é só instrução. Troque o <li> ou <tr>
+de exemplo pelo conteúdo real.
+
+Para esconder de novo: faça o contrário. Dentro do comentário não pode
+haver outro comentário, nem a sequência  -->  em lugar nenhum.
 
 
 ADICIONAR UM ARTIGO (ou texto de hobby)
 ---------------------------------------
-1. Copie o modelo com um nome que comece pela data:
+1. Copie o modelo com um nome que comece pela data (o mkdir cria a
+   pasta se ela ainda não existir):
 
+     mkdir -p profissional/artigos
      cp _modelos/artigo.html profissional/artigos/2026-12-meu-tema.html
+
+     mkdir -p hobbies/estudos
      cp _modelos/artigo.html hobbies/estudos/2026-12-meu-tema.html
 
    Use letras minúsculas, sem acento e sem espaço (hífen no lugar).
 
-2. Abra a cópia e preencha os pontos marcados de [1] a [5].
+2. Abra a cópia e preencha os pontos marcados de [1] a [5]. Em [1b]
+   escreva um resumo de 1 a 2 frases: é o que aparece no Google e na
+   prévia quando alguém manda o link no WhatsApp ou LinkedIn.
 
 3. Na página da seção (profissional/index.html ou hobbies/index.html),
+   mostre a seção se ela estiver escondida (veja SEÇÕES ESCONDIDAS) e
    cole uma linha NO TOPO da lista:
 
      <li><time datetime="2026-12-05">12/2026</time> · <a href="artigos/2026-12-meu-tema.html">Título do texto</a></li>
@@ -51,14 +81,16 @@ id, o título <h2> e o conteúdo.
 
 ADICIONAR UMA PARTIDA DE XADREZ
 -------------------------------
-Em hobbies/index.html, copie um bloco <tr> ... </tr> inteiro e cole
-no topo do <tbody>. Troque a data, a abertura, o resultado e o link.
+Em hobbies/index.html, mostre a tabela "Registro de Partidas" se ela
+estiver escondida (veja SEÇÕES ESCONDIDAS). Copie um bloco <tr> ... </tr>
+inteiro e cole no topo do <tbody>. Troque a data, a abertura, o
+resultado e o link (o endereço da partida no Chess.com).
 
 
 DADOS DO CHESS.COM (ATUALIZAÇÃO AUTOMÁTICA)
 -------------------------------------------
 Em hobbies/index.html, o trecho entre <!-- chesscom:inicio --> e
-<!-- chesscom:fim --> (ratings e últimas partidas) é gerado
+<!-- chesscom:fim --> (tabela de ratings) é gerado
 pelo script _scripts/atualizar_xadrez.py. NÃO edite esse trecho à mão:
 ele é sobrescrito.
 
@@ -73,8 +105,8 @@ ele é sobrescrito.
      ou no GitHub:   aba Actions -> "Atualizar dados do Chess.com"
                      -> Run workflow
 
-- Para trocar o usuário ou o número de partidas, edite USUARIO e
-  N_PARTIDAS no topo de _scripts/atualizar_xadrez.py.
+- Para trocar o usuário, edite USUARIO no topo de
+  _scripts/atualizar_xadrez.py.
 
 - A tabela "Partidas recentemente analisadas" continua manual.
 
@@ -99,6 +131,9 @@ CRIAR UMA SEÇÃO NOVA (ex.: projetos)
 2. Copie hobbies/index.html para projetos/index.html e adapte.
 3. Acrescente o link no <nav> de TODAS as páginas (inclusive do modelo).
    Para achar todas:  grep -rl "<nav>" --include=*.html .
+   Na página nova, coloque aria-current="page" no link dela própria
+   (é o que avisa ao leitor de tela "você está aqui"), e troque a
+   description e os og: do <head>.
 
 
 TESTAR
