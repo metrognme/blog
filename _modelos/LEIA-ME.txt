@@ -1,0 +1,63 @@
+COMO ADICIONAR E REMOVER CONTEÚDO
+=================================
+
+Estrutura:
+  index.html                 página inicial
+  agora.html                 página "Agora"
+  contato.html               formulário de contato
+  advocacia/index.html       lista de artigos       -> arquivos em advocacia/artigos/
+  xadrez/index.html          lista de estudos       -> arquivos em xadrez/estudos/
+                             + tabela de partidas
+
+
+ADICIONAR UM ARTIGO (ou estudo de xadrez)
+-----------------------------------------
+1. Copie o modelo com um nome que comece pela data:
+
+     cp _modelos/artigo.html advocacia/artigos/2026-12-meu-tema.html
+     cp _modelos/artigo.html xadrez/estudos/2026-12-meu-tema.html
+
+   Use letras minúsculas, sem acento e sem espaço (hífen no lugar).
+
+2. Abra a cópia e preencha os pontos marcados de [1] a [5].
+
+3. Na página da seção (advocacia/index.html ou xadrez/index.html),
+   cole uma linha NO TOPO da lista:
+
+     <li><time datetime="2026-12-05">12/2026</time> · <a href="artigos/2026-12-meu-tema.html">Título do texto</a></li>
+
+   (Em xadrez, o caminho começa com estudos/ em vez de artigos/.)
+
+
+ADICIONAR UMA PARTIDA DE XADREZ
+-------------------------------
+Em xadrez/index.html, copie um bloco <tr> ... </tr> inteiro e cole
+no topo do <tbody>. Troque a data, a abertura, o resultado e o link.
+
+
+REMOVER UM CONTEÚDO
+-------------------
+1. Apague a linha <li> (ou <tr>) da página da seção.
+2. Apague o arquivo:  rm advocacia/artigos/2026-11-tema.html
+   (Ou mantenha o arquivo e tire só a linha: ele sai da lista,
+   mas quem tiver o link ainda consegue abrir.)
+
+
+ATUALIZAR A PÁGINA "AGORA"
+--------------------------
+Em agora.html, troque os itens da lista e atualize a data nos DOIS
+lugares: o datetime="AAAA-MM-DD" e o texto visível.
+
+
+CRIAR UMA SEÇÃO NOVA (ex.: projetos)
+------------------------------------
+1. mkdir -p projetos/itens
+2. Copie xadrez/index.html para projetos/index.html e adapte.
+3. Acrescente o link no <nav> de TODAS as páginas (inclusive do modelo).
+   Para achar todas:  grep -rl "<nav>" --include=*.html .
+
+
+TESTAR
+------
+  python3 -m http.server 8000      e abra http://localhost:8000
+  (ou dê dois cliques no index.html: os links também funcionam assim)
