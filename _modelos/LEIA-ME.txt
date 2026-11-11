@@ -31,13 +31,15 @@ ADICIONAR UM ARTIGO (ou texto de hobby)
 ADICIONAR OU REMOVER UM SERVIÇO
 -------------------------------
 Em profissional/index.html, na seção "Principais Serviços que Realizo",
-cada serviço é um par:
+cada serviço é um bloco:
 
-     <h3>Nome do serviço</h3>
-     <p>Quando ele é necessário, o risco de não fazer e o que é o serviço.</p>
+     <dl>
+         <dt><strong>Nome do serviço</strong></dt>
+         <dd><em>Pergunta que identifica o leitor?</em> Frase com o benefício.</dd>
+     </dl>
 
-Copie um par e cole onde quiser (a ordem é a da página). Para remover,
-apague o par inteiro.
+O <dd> aparece recuado embaixo do nome. Copie um bloco inteiro e cole
+onde quiser (a ordem é a da página). Para remover, apague o bloco.
 
 
 ADICIONAR UM HOBBY NOVO
