@@ -28,6 +28,18 @@ ADICIONAR UM ARTIGO (ou texto de hobby)
    (Em hobbies, o caminho começa com estudos/ em vez de artigos/.)
 
 
+ADICIONAR OU REMOVER UM SERVIÇO
+-------------------------------
+Em profissional/index.html, na seção "Principais Serviços que Realizo",
+cada serviço é um par:
+
+     <h3>Nome do serviço</h3>
+     <p>Quando ele é necessário, o risco de não fazer e o que é o serviço.</p>
+
+Copie um par e cole onde quiser (a ordem é a da página). Para remover,
+apague o par inteiro.
+
+
 ADICIONAR UM HOBBY NOVO
 -----------------------
 Em hobbies/index.html, copie um bloco <section> ... </section> inteiro

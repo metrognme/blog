@@ -19,7 +19,7 @@ Opening `index.html` directly via `file://` must also keep working.
 ## Structure
 
 - `index.html`: landing page (bio, `#contato` section with LinkedIn/Instagram/Chess.com links, links to sections). The nav "Contato" item points to `index.html#contato` (there is no separate contact page). `atualmente.html`: now page ("Atualmente").
-- `profissional/index.html` ("Profissional": advocacia/Legal Ops areas) lists articles in `profissional/artigos/`; `hobbies/index.html` has one `<section>` per hobby (currently `#xadrez`, with the generated Chess.com block, its studies list and the hand-kept games table); hobby texts live in `hobbies/estudos/`.
+- `profissional/index.html` ("Profissional"): fixed `#servicos` section ("Principais Serviços que Realizo", one `<h3>` + `<p>` per service), then advocacia/Legal Ops areas, then lists articles in `profissional/artigos/`; `hobbies/index.html` has one `<section>` per hobby (currently `#xadrez`, with the generated Chess.com block, its studies list and the hand-kept games table); hobby texts live in `hobbies/estudos/`.
 - `_modelos/artigo.html` is the template for new articles/studies (written for depth-2 paths, `../../`). `_modelos/LEIA-ME.txt` is the owner's add/remove guide (in Portuguese). Keep it in sync if the workflow changes.
 
 ## Conventions
