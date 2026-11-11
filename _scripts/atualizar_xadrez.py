@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Atualiza o bloco do Chess.com em hobbies/index.html.
 
-Busca perfil, ratings e últimas partidas na Published-Data API do Chess.com
+Busca ratings e últimas partidas na Published-Data API do Chess.com
 (pública, sem chave) e reescreve o trecho entre os marcadores
 <!-- chesscom:inicio --> e <!-- chesscom:fim -->. O site continua sendo só
 HTML: este script roda antes da publicação (no GitHub Actions ou à mão).
@@ -66,9 +66,20 @@ def cor_do_usuario(partida):
 
 
 def resultado(partida):
-    """Devolve "Vitória", "Derrota" ou "Empate" do ponto de vista de USUARIO."""
-    # TODO(human)
-    raise NotImplementedError
+    """Devolve "Vitória", "Derrota" ou "Empate" do ponto de vista de USUARIO.
+
+    A API não marca o vencedor da partida, só um código por lado. Quem venceu
+    recebe "win"; o perdedor recebe o motivo ("checkmated", "resigned",
+    "timeout"...). Se ninguém tem "win", foi empate. Olhar o "win" do
+    adversário cobre qualquer motivo de derrota novo sem precisar listá-lo.
+    """
+    cor = cor_do_usuario(partida)
+    rival = "black" if cor == "white" else "white"
+    if partida[cor]["result"] == "win":
+        return "Vitória"
+    if partida[rival]["result"] == "win":
+        return "Derrota"
+    return "Empate"
 
 
 def data_html(timestamp):
@@ -77,16 +88,9 @@ def data_html(timestamp):
     return f'<time datetime="{dia:%Y-%m-%d}">{dia:%d/%m/%Y}</time>'
 
 
-def gerar_html(perfil, stats, partidas):
+def gerar_html(stats, partidas):
     """Linhas do bloco (sem recuo), na ordem em que entram na página."""
     linhas = ["<h3>No Chess.com</h3>"]
-
-    pais = perfil.get("country", "").rsplit("/", 1)[-1]
-    linhas.append(
-        f'<p><a href="{escape(perfil["url"])}" target="_blank" rel="noopener me">'
-        f'{escape(perfil["username"])}</a> · membro desde {data_html(perfil["joined"])}'
-        f' · {perfil.get("followers", 0)} seguidor(es) · {escape(pais)}</p>'
-    )
 
     linhas += [
         '<table border="1">',
@@ -143,7 +147,7 @@ def gerar_html(perfil, stats, partidas):
 
     agora = datetime.now(FUSO)
     linhas.append(
-        f'<p><small>{MARCA_DATA} <time datetime="{agora:%Y-%m-%dT%H:%M%z}">'
+        f'<p><small>{MARCA_DATA} <time datetime="{agora.isoformat(timespec="minutes")}">'
         f"{agora:%d/%m/%Y às %H:%M}</time>.</small></p>"
     )
     return linhas
@@ -160,11 +164,10 @@ def main():
     if ini == -1 or fim == -1 or fim < ini:
         sys.exit(f"Marcadores {INICIO} / {FIM} não encontrados em {PAGINA}.")
 
-    perfil = buscar(API)
     stats = buscar(f"{API}/stats")
     partidas = ultimas_partidas()
 
-    bloco = "\n".join(RECUO + l if l else "" for l in gerar_html(perfil, stats, partidas))
+    bloco = "\n".join(RECUO + l if l else "" for l in gerar_html(stats, partidas))
     bloco_atual = pagina[ini + len(INICIO):fim]
     if sem_data(bloco) == sem_data(bloco_atual):
         print("Dados do Chess.com sem mudanças. Nada a gravar.")

@@ -1,0 +1,36 @@
+# Atualiza todo dia o bloco do Chess.com em hobbies/index.html.
+# Roda nos servidores do GitHub. Para rodar na hora: aba Actions →
+# "Atualizar dados do Chess.com" → Run workflow.
+name: Atualizar dados do Chess.com
+
+on:
+  schedule:
+    - cron: "0 10 * * *" # 10:00 UTC = 07:00 em Goiânia
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atualizar-xadrez
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Buscar dados e regenerar o bloco
+        run: python3 _scripts/atualizar_xadrez.py
+
+      - name: Commit se algo mudou
+        run: |
+          if git diff --quiet; then
+            echo "Nada mudou."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Atualiza dados do Chess.com"
+          git push

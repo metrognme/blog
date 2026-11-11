@@ -2,12 +2,11 @@ COMO ADICIONAR E REMOVER CONTEÚDO
 =================================
 
 Estrutura:
-  index.html                 página inicial
+  index.html                 página inicial (Sobre Mim + Contato)
   atualmente.html            página "Atualmente"
-  contato.html               links para LinkedIn, Instagram e Chess.com
   profissional/index.html    lista de artigos       -> arquivos em profissional/artigos/
   hobbies/index.html         um bloco por hobby     -> textos em hobbies/estudos/
-                             (xadrez: lista de estudos + tabela de partidas)
+                             (xadrez: dados do Chess.com + estudos + partidas)
 
 
 ADICIONAR UM ARTIGO (ou texto de hobby)
@@ -40,6 +39,30 @@ ADICIONAR UMA PARTIDA DE XADREZ
 -------------------------------
 Em hobbies/index.html, copie um bloco <tr> ... </tr> inteiro e cole
 no topo do <tbody>. Troque a data, a abertura, o resultado e o link.
+
+
+DADOS DO CHESS.COM (ATUALIZAÇÃO AUTOMÁTICA)
+-------------------------------------------
+Em hobbies/index.html, o trecho entre <!-- chesscom:inicio --> e
+<!-- chesscom:fim --> (ratings e últimas partidas) é gerado
+pelo script _scripts/atualizar_xadrez.py. NÃO edite esse trecho à mão:
+ele é sobrescrito.
+
+- Todo dia, às 07:00, o GitHub roda o script sozinho e faz um commit
+  se algo mudou. Por isso, ANTES de editar o site no computador:
+
+     git pull
+
+- Para atualizar na hora:
+     no computador:  python3 _scripts/atualizar_xadrez.py
+                     (depois faça commit e push)
+     ou no GitHub:   aba Actions -> "Atualizar dados do Chess.com"
+                     -> Run workflow
+
+- Para trocar o usuário ou o número de partidas, edite USUARIO e
+  N_PARTIDAS no topo de _scripts/atualizar_xadrez.py.
+
+- A tabela "Partidas recentemente analisadas" continua manual.
 
 
 REMOVER UM CONTEÚDO
