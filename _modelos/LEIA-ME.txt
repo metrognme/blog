@@ -4,8 +4,8 @@ COMO ADICIONAR E REMOVER CONTEÚDO
 Estrutura:
   index.html                 página inicial
   atualmente.html            página "Atualmente"
-  contato.html               formulário de contato
-  advocacia/index.html       lista de artigos       -> arquivos em advocacia/artigos/
+  contato.html               links para LinkedIn, Instagram e Chess.com
+  profissional/index.html    lista de artigos       -> arquivos em profissional/artigos/
   hobbies/index.html         um bloco por hobby     -> textos em hobbies/estudos/
                              (xadrez: lista de estudos + tabela de partidas)
 
@@ -14,14 +14,14 @@ ADICIONAR UM ARTIGO (ou texto de hobby)
 ---------------------------------------
 1. Copie o modelo com um nome que comece pela data:
 
-     cp _modelos/artigo.html advocacia/artigos/2026-12-meu-tema.html
+     cp _modelos/artigo.html profissional/artigos/2026-12-meu-tema.html
      cp _modelos/artigo.html hobbies/estudos/2026-12-meu-tema.html
 
    Use letras minúsculas, sem acento e sem espaço (hífen no lugar).
 
 2. Abra a cópia e preencha os pontos marcados de [1] a [5].
 
-3. Na página da seção (advocacia/index.html ou hobbies/index.html),
+3. Na página da seção (profissional/index.html ou hobbies/index.html),
    cole uma linha NO TOPO da lista:
 
      <li><time datetime="2026-12-05">12/2026</time> · <a href="artigos/2026-12-meu-tema.html">Título do texto</a></li>
@@ -45,7 +45,7 @@ no topo do <tbody>. Troque a data, a abertura, o resultado e o link.
 REMOVER UM CONTEÚDO
 -------------------
 1. Apague a linha <li> (ou <tr>) da página da seção.
-2. Apague o arquivo:  rm advocacia/artigos/2026-11-tema.html
+2. Apague o arquivo:  rm profissional/artigos/2026-11-tema.html
    (Ou mantenha o arquivo e tire só a linha: ele sai da lista,
    mas quem tiver o link ainda consegue abrir.)
 

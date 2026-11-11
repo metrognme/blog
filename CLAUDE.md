@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Personal static site (advocacia, Legal Ops, hobbies) written in **pure HTML5: no CSS, no JavaScript, no build step, no tests**. Content is in Brazilian Portuguese (`lang="pt-BR"`). The owner adds and removes content by hand, so keeping that workflow simple is the main design goal.
+Personal static site (professional: advocacia/Legal Ops; hobbies) written in **pure HTML5: no CSS, no JavaScript, no build step, no tests**. Content is in Brazilian Portuguese (`lang="pt-BR"`). The owner adds and removes content by hand, so keeping that workflow simple is the main design goal.
 
 ## Running
 
@@ -16,8 +16,8 @@ Opening `index.html` directly via `file://` must also keep working.
 
 ## Structure
 
-- `index.html`: landing page (short bio + links to sections). `atualmente.html`: now page ("Atualmente"). `contato.html`: Formspree form.
-- `advocacia/index.html` lists articles in `advocacia/artigos/`; `hobbies/index.html` has one `<section>` per hobby (currently `#xadrez`, with its studies list and games table); hobby texts live in `hobbies/estudos/`.
+- `index.html`: landing page (short bio + links to sections). `atualmente.html`: now page ("Atualmente"). `contato.html`: links to LinkedIn, Instagram and Chess.com (no form).
+- `profissional/index.html` ("Profissional": advocacia/Legal Ops areas) lists articles in `profissional/artigos/`; `hobbies/index.html` has one `<section>` per hobby (currently `#xadrez`, with its studies list and games table); hobby texts live in `hobbies/estudos/`.
 - `_modelos/artigo.html` is the template for new articles/studies (written for depth-2 paths, `../../`). `_modelos/LEIA-ME.txt` is the owner's add/remove guide (in Portuguese). Keep it in sync if the workflow changes.
 
 ## Conventions
@@ -30,6 +30,5 @@ Opening `index.html` directly via `file://` must also keep working.
 
 ## Known placeholders
 
-- `contato.html` posts to `https://formspree.io/f/seu-id`. `seu-id` must be replaced with a real Formspree ID.
 - The games table's "Ver PGN" link points to the generic `https://chess.com`.
 - `hobbies/estudos/2026-11-sistema-london.html` is sample content.
