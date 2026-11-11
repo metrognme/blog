@@ -1,0 +1,5 @@
+# Configuração do GitHub Pages (Jekyll).
+# Arquivos listados aqui ficam no repositório, mas não são publicados no site.
+# Pastas que começam com "_" (como _modelos/) já ficam de fora automaticamente.
+exclude:
+  - CLAUDE.md
